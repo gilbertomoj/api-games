@@ -1,5 +1,5 @@
-# API de jogos 
-API utilizada para listagem e cadastro de jogos 
+# API de Games 
+API utilizada para listagem, cadastro e alteração de jogos 
 ## Endpoints  
 ### GET /games
 O endpoint é responsavel por retornar a listagem de todos os jogos cadastrados no banco
