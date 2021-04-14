@@ -66,8 +66,28 @@ var DB = {
 
 
 app.get("/games", auth ,async (req, res)=>{
+
+    var HATEOAS = [
+        {
+            href: "http://localhost:8080/game/0",
+            method: "DELETE",
+            rel: "delete_game"
+        },
+        {
+            href: "http://localhost:8080/game/0",
+            method: "GET",
+            rel: "get_game"
+        },
+        {
+            href: "http://localhost:8080/auth",
+            method: "POST",
+            rel: "login"
+        }
+
+    ]
+
     var games = await Games.findAll();
-    res.json(games)
+    res.json({games, _links: HATEOAS})
 })
 
 app.post("/game", ( req, res)=>{
@@ -91,17 +111,39 @@ app.post("/game", ( req, res)=>{
 
 
 app.get("/game/:id",auth ,async (req, res)=>{
+
     if (isNaN(req.params.id)) {
         res.sendStatus(400)
     }else{
+
         var id = req.params.id;
+
+        var HATEOAS = [
+            {
+                href: "http://localhost:8080/game/"+id,
+                method: "DELETE",
+                rel: "delete_game"
+            },
+            {
+                href: "http://localhost:8080/game/"+id,
+                method: "PUT",
+                rel: "edit_games"
+            },
+            {
+                href: "http://localhost:8080/games",
+                method: "GET",
+                rel: "get_all_games"
+            }
+    
+        ]
+
         var game = await Games.findOne({
             where : {id},
         });
         console.log(game)
         if (game != undefined) {
             res.statusCode = 200;
-            res.json(game)
+            res.json({game, _links: HATEOAS})
         } else {
             res.sendStatus(404)
         }
